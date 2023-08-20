@@ -1,0 +1,14 @@
+syntax = "proto3";
+import "CsCmd.proto";
+package pb;
+
+
+
+//房间信息缓冲
+message RoomMsgCacheInfo
+{
+    uint64 roomid = 1; // 房间的id号
+    string addr = 2;  // 房间所在的房间服务器的地址
+    uint32 port = 3;  // 房间所在的房间服务器的端口
+    uint64 host = 4; //缓存该条信息的服务节点
+}

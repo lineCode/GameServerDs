@@ -1,0 +1,26 @@
+syntax = "proto3";
+import "gate_login_msg.proto";
+package pb;
+
+
+enum SS_LOGIN_DB_CMD {
+    SS_LOGIN_DB_DEFAULT = 0;
+
+    SS_LOGIN_DB_AUTH_REQ = 301;
+
+    SS_DB_LOGIN_AUTH_RSP = 302;
+}
+
+
+message SSLogin2DLoginAuthReq {
+    uint32 request_id = 1;
+    SSGate2LLoginAuthReq req = 2;
+}
+
+message SSDB2LLoginAuthRsp{
+    uint32 request_id = 1;
+    SSLogin2GLoginAuthRsp rsp = 2;
+}
+
+
+ 

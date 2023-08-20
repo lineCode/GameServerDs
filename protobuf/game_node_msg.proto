@@ -1,0 +1,155 @@
+syntax = "proto3";
+import "CsCmd.proto";
+package pb;
+
+
+enum SS_GAME_NODE_MSG_CMD {
+
+    SS_GAME_MSG_DEFAULT = 0;
+
+    SS_GAME_NODE_PULLROOMINFO_REQ = 500;
+
+    SS_NODE_GAME_PULLROOMINFO_RSP = 501;
+
+    SS_GAME_NODE_CREATEROOM_REQ = 502;
+    SS_NODE_GAME_CREATEROOM_RSP = 503;
+
+    SS_GAME_NODE_ENTERROOM_REQ = 504;
+    SS_NODE_GAME_ENTERROOM_RSP = 505;
+
+    SS_GAME_NODE_LEAVEROOM_REQ = 506;
+    SS_NODE_GAME_LEAVEROOM_RSP = 507;
+
+    SS_GAME_NODE_CHOOSELEVEL_REQ = 508;
+    SS_NODE_GAME_CHOOSELEVEL_RSP = 509;
+
+    SS_GAME_NODE_READYROOM_REQ = 510;
+    SS_NODE_GAME_READYROOM_RSP = 511;
+
+    SS_GAME_NODE_PULLBATTLEINFO_REQ = 512;
+
+    SS_NODE_GAME_PULLBATTLEINFO_RSP = 513;
+
+        SS_GAME_NODE_USER_DISCONNECT_NOTIFY = 514;
+    SS_NODE_GAME_USER__DISCONNECT_TIMEOUT_NOTIFY = 515;
+
+}
+
+
+message SSG2NPullMsgInfoReq{
+    uint64 roomid = 1;
+    uint32 accountid = 2;
+}
+
+
+
+message SSN2GPullMsgInfoRsp{
+    enum RetCode {
+        RET_SUCC = 0;
+        RET_FAILED = 1;
+        RET_ROOM_NOT_EXIST = 2;
+        RET_SERVEICE_NOT_AVAILBLE = 3;
+    }
+    RetCode retcode = 1;
+    uint32 accountid = 2;
+    RoomInfoMsg roomMsg = 3;
+    repeated InRoomUserInfo userlists = 4;
+}
+
+
+message BattleServerMsg
+{
+    string addr = 1;
+    uint32 port = 2;
+    string token = 3;
+}
+
+message SSN2GPullBattleMsgInfoRsp{
+    enum RetCode {
+        RET_SUCC = 0;
+        RET_FAILED = 1;
+        RET_ROOM_NOT_EXIST = 2;
+        RET_SERVEICE_NOT_AVAILBLE = 3;
+    }
+    RetCode retcode = 1;
+    uint64 accountid = 2;
+    BattleServerMsg battleServerMsg = 3;
+}
+
+
+
+message SSG2NCreateRoomReq
+{
+    uint64 accountid = 1;
+    TryCreateRoomCsReq req = 2;
+}
+
+message SSN2GCreateRoomRsp
+{
+    uint64 accountid = 1;
+    TryCreateRoomScRsp rsp = 2;
+}
+
+message SSG2NEnterRoomReq
+{
+    uint64 accountid = 1;
+    uint64 RoomID = 2;
+    TryEnterRoomCsReq req = 3;
+}
+
+message SSN2GEnterRoomRsp
+{
+    uint64 accountid = 1;
+    TryEnterRoomScRsp rsp = 2;
+}
+
+message SSG2NLeaveRoomReq
+{
+    uint64 accountid = 1;
+    uint64 RoomID = 2;
+    TryLeaveRoomCsReq req = 3;
+}
+
+message SSN2GLeaveRoomRsp
+{
+    uint64 accountid = 1;
+    TryLeaveRoomScRsp rsp = 2;
+}
+
+message SSG2NChooseLevelReq
+{
+    uint64 accountid = 1;
+    uint64 RoomID = 2;
+    ChooseLevelCsReq req = 3;
+}
+
+message SSN2GChooseLevelRsp
+{
+    uint32 accountid = 1;
+    ChooseLevelScRsp rsp = 2;
+}
+
+message SSG2NReadyInRoomReq
+{    
+    uint64 accountid = 1;
+    uint64 RoomID = 2;
+    ReadyInRoomCsReq req = 3;
+}
+
+message SSN2GReadyInRoomRsp
+{        
+    uint64 accountid = 1;
+    ReadyInRoomScRsp rsp = 2;
+}
+
+message SSG2NUserDisConnectRoomNotify
+{
+    uint64 accountid = 1;
+    uint64 roomid = 2;
+}
+
+message SSN2GUserDisConnecteTimeoutNotify
+{
+    uint64 accountid = 1;
+    uint64 roomid = 2;
+}

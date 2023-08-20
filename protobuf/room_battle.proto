@@ -1,0 +1,87 @@
+syntax = "proto3";
+package pb;
+
+
+
+enum SS_ROOM_BATTLE_CMD
+{
+    SS_ROOM_BATTLE_DEFAULT = 0;
+    SS_ROOM_CREATE_GAMEROOM = 100001;
+    SS_BATTLE_CREATE_RSP = 100002;
+
+    SS_ROOM_JOIN_GAMEROOM = 100003;
+    SS_BATTLE_JOIN_RSP = 100004;
+
+    SS_ROOM_LEAVE_GAMEROOM = 100005;
+    SS_BATTLE_LEAVE_RSP = 100006;
+}
+
+message PlayerInfo
+{
+    uint32 accountid = 1;
+    uint32 playerid = 2;
+}
+
+message SSR2BCreateRoomReq 
+{
+    uint64 roomid = 1;
+    repeated PlayerInfo pinfo = 2;
+    string token = 3;
+}
+
+message SSB2RCreateRoomRsp
+{
+    enum RetCode
+    {
+        RET_SUCC = 0;
+        RET_FAILED = 1;
+        RET_GAME_EXIST = 2;
+    };
+    RetCode retcode = 1;
+    uint64 roomid = 2;
+}
+
+message SSR2BJoinRoomReq
+{
+    uint64 roomid = 1;
+    PlayerInfo pinfo = 2;
+}
+
+message SSB2RJoinRoomRsp
+{
+    enum Retcode
+    {
+        RET_SUCC = 0;
+        RET_FAILED = 1;
+        RET_GAME_NOT_EXIST = 2;
+    };
+    Retcode retcode = 1;
+    uint64 roomid = 2;
+}
+
+message SSR2BLeaveRoomReq
+{
+    uint64 roomid = 1;
+    uint64 accountid = 2;
+}
+
+message SSB2RLeaveRoomRsp
+{
+    enum Retcode
+    {
+        RET_SUCC = 0;
+        RET_FAILED = 1;
+        RET_GAME_NOT_EXIST = 2;
+        RET_USER_NOT_EXIST = 3;
+    };
+    Retcode retcode = 1;
+    uint64 roomid = 2;
+}
+
+
+
+
+
+
+
+

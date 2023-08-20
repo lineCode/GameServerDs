@@ -1,0 +1,262 @@
+/*
+    定义游戏整体流程控制的包
+*/
+syntax = "proto3";
+package pb;
+
+//message LoginAuthCsReq // 玩家登录只需要输入名字
+//{
+//  string name = 1;
+//}
+
+message  LoginAuthCsReq
+{
+  string username = 1;
+  string passwd = 2;
+}
+
+
+message LoginAuthScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;
+    RET_FAILED = 1;//系统原因，登录失败
+    RET_NOT_EXIST = 2; //用户不存在且无法创建
+  }
+  RetCode retCode = 1;
+  string username = 2;
+  uint32 accountId = 3;
+}
+
+
+message LoginCsReq{
+  string name = 1;
+  uint32 accountId = 2;
+}
+
+
+message LoginScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;
+    RET_FAILED = 1;//系统原因，登录失败
+    RET_ACCOUNT_ERROR = 2;//登录账号错误
+    RET_RECONNECT = 3;//账号重连，需处理重连逻辑
+    RET_IN_GAME = 4;//账号处于游戏中，无法登录
+    RET_REQ_INVALID = 5;//请求不合法
+  }
+  RetCode retcode = 1;
+  uint32 accountid = 2;
+  bool IsinRoom = 3;
+  bool IsBattling = 4;
+}
+
+
+
+message RoomInfoMsg
+{
+  uint64 roomid  = 1;
+  uint32 max_user_count = 2;
+  uint32 cur_user_count = 3;
+  uint32 level = 4;//房间对应的关卡信息
+  uint32 status = 5;
+  string RoomName = 6;
+}
+
+
+message SCGate2ClientMsgNotify
+{
+    uint32 accountid = 1;
+    RoomInfoMsg roommsg = 2;
+    repeated InRoomUserInfo users = 3;
+}
+
+
+message SCNode2ClientBattleMsgNotify
+{
+    uint32 accountid = 1;
+    string addr = 2;
+    uint32 port = 3;
+    string token = 4;
+}
+
+
+message AllRoomInfoNotify
+{
+  uint32 room_count  = 1;
+  repeated RoomInfoMsg room_info_list = 2;
+}
+
+message TryCreateRoomCsReq
+{
+  uint32 AccountID = 1;//用户的uid
+  uint64 RoomID = 2;//待创建房间的id号，若不存在则由服务器指定
+  uint32 MaxUserCount = 3;//房间最大人数，若没有则默认为4
+  string Name = 4;
+}
+
+message TryCreateRoomScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;//房间创建成功
+    RET_FAILED = 1;//房间创建失败
+    RET_ROOMID_EXIST = 2;//房间号已存在，创建失败
+    RET_USER_IN_ROOM = 3;//用户已在房间，创建失败
+  };
+  RetCode retcode = 1;
+  uint64 RoomID = 2;
+  uint32 MaxUserCount = 3;
+  uint32 Level = 4;
+}
+
+message TryEnterRoomCsReq
+{
+  uint32 AccountID = 1;
+  uint64 RoomID = 2;
+}
+
+message TryEnterRoomScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;
+    RET_FAILED = 1;
+    RET_ROOM_NOT_EXIST = 2;
+    RET_ROOM_FULL = 3;
+    RET_ROOM_BUSY = 4;
+    RET_IN_ROOM = 5;
+    RET_REQ_INVALID = 6;
+  };
+  RetCode retcode = 1;
+  uint64 roomId = 2;
+  uint32 MaxUserCount = 3;//最大人数
+  uint32 Level = 4;//关卡等级
+}
+
+message TryLeaveRoomCsReq
+{
+  uint64 accountId = 1;
+  uint64 roomid = 2;
+}
+
+message TryLeaveRoomScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;
+    RET_FAILED = 1;
+    RET_NOT_IN_ROOM = 2;
+    RET_ROOM_BUSY = 3;
+    RET_REQ_INVALID = 4;
+  }
+  RetCode retcode = 1;
+}
+
+message InRoomUserInfo
+{
+  uint64 AccountID = 1;
+  uint32 playerID = 2;
+  uint32 isHost = 3;
+  uint32 ReadyState = 4;
+  string name = 5;
+}
+
+message RoomUserInfoNotify
+{
+  uint64 RoomID = 1;
+  uint32 MaxUserCount = 2;
+  uint32 Level = 3;
+  repeated InRoomUserInfo userlists = 4;
+}
+
+
+//关卡选择请求
+message ChooseLevelCsReq
+{
+  uint64 AccountId = 1;
+  uint64 roomId = 2;
+  uint32 LevelId = 3;
+}
+
+message ChooseLevelScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;
+    RET_REQ_INVALID = 1;//请求不合法（非房主选择关卡）
+    RET_ROOM_BUSY = 2;//游戏已经开始等
+    RET_LEVEL_NOT_EXIST = 3;//选择的关卡id不存在
+  }
+  RetCode retcode = 1;
+  uint64 roomId = 2;
+  uint32 LevelId = 3;
+}
+
+
+// 客户端在房间内准备
+message ReadyInRoomCsReq
+{
+  uint32 AccountID = 1; // 服务器存储的数据,全局唯一
+  uint64 RoomID = 2;
+  uint32 MasterPort = 3;
+}
+
+
+message ReadyInRoomScRsp
+{
+  enum RetCode
+  {
+    RET_SUCC = 0;
+    RET_FAILED = 1;
+    RET_REQ_INVALID = 2;
+    RET_ROLE_NOT_SELECTED = 3;
+    RET_USER_NOT_READY = 4;//仅针对房主，当房内成员都没准备时无法开始游戏
+    RET_USER_BEEN_READY = 5;//用户已经准备
+  }
+  RetCode retcode = 1;
+}
+
+message TryLinkTeamScRsp // 客户端开始互联
+{
+  uint32 playerID = 1; //告诉你你是几号玩家
+  uint32 type = 2 ; // 告诉你你是哪一类玩家 M/S
+  string MasterIP = 3; // Master的IP 
+  uint32 Port = 4; // Master的Port
+  uint32 LevelID = 5;
+}
+
+message TeamHeartBeatCsReq // slave和master之间的链接已经建立,Client间发包
+{
+  uint32 playerID = 1;
+  uint32 type = 2;
+}
+
+message LinkTeamSuccCsReq // 在每个人都建立好了自己的链接之后,发送（暂时无用）
+{
+  uint32 AccountID = 1;
+  bool succ = 2;
+}
+
+message GameStartScReq
+{
+  uint32 LevelID = 1; // 游戏正式开始,给一个开启游戏的命令
+}
+
+message GameOverCsNotify
+{
+  uint64 accountId = 1;
+  uint64 roomId = 2;
+  uint64 score = 3;
+}
+
+
+message BattleMsgScNotify
+{
+    uint32 accountid = 1;
+    string addr = 2;
+    uint32 port = 3;
+    string token = 4;
+}

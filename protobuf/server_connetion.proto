@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pb;
+
+
+enum SS_CONNECT_CMD {
+
+    SS_CONNECT_DEFAULT = 0;
+    SS_CONNECT_REQ_ID = 40000;
+    SS_CONNECT_RSP_ID = 40001;
+}
+
+
+
+message SSConnectPacket
+{
+    uint32 sstype = 1;
+    uint32 serveruid = 2;
+}

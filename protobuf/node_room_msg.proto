@@ -1,0 +1,117 @@
+syntax = "proto3";
+import "CsCmd.proto";
+import "game_node_msg.proto";
+package pb;
+
+
+enum SS_NODE_ROOM_MSG_CMD
+{
+    SS_NODE_MSG_DEFAULT = 0;
+
+    SS_NODE_ROOM_PULLROOMINFO_REQ = 600;
+
+    SS_ROOM_NODE_PULLROOMINFO_RSP = 601;
+
+    SS_NODE_ROOM_CREATEROOM_REQ = 602;
+    SS_ROOM_NODE_CREATEROOM_RSP = 603;
+
+    SS_NODE_ROOM_ENTERROOM_REQ = 604;
+    SS_ROOM_NODE_ENTERROOM_RSP = 605;
+
+    SS_NODE_ROOM_LEAVEROOM_REQ = 606;
+    SS_ROOM_NODE_LEAVEROOM_RSP = 607;
+
+    SS_NODE_ROOM_CHOOSELEVEL_REQ = 608;
+    SS_ROOM_NODE_CHOOSELEVEL_RSP = 609;
+
+    SS_NODE_ROOM_READYROOM_REQ = 610;
+    SS_ROOM_NODE_READYROOM_RSP = 611;
+
+
+    SS_NODE_ROOM_PULLBATTLEINFO_REQ = 612;
+
+    SS_ROOM_NODE_PULLBATTLEINFO_RSP = 613;
+}
+
+
+message SSN2RPullMsgReq
+{
+    uint32 request_id = 1;
+    SSG2NPullMsgInfoReq req = 2;
+}
+
+message SSR2NPullRoomMsgRsp 
+{
+    uint32 request_id = 1;
+    SSN2GPullMsgInfoRsp rsp = 2;
+}
+
+message SSR2NPullRoomMsgRSP
+{
+    uint32 request_id = 1;
+    SSN2GPullBattleMsgInfoRsp rsp = 2;
+}
+
+
+message SSN2RCreateRoomReq
+{
+    uint64 request_id = 1;
+    SSG2NCreateRoomReq req = 2;
+}
+
+message SSR2NCreateRoomRsp
+{
+    uint64 request_id = 1;
+    SSN2GCreateRoomRsp rsp = 2;
+}
+
+
+
+message SSN2REnterRoomReq
+{
+    uint64 request_id = 1;
+    SSG2NEnterRoomReq req = 2;
+}
+
+message SSR2NEnterRoomRsp
+{
+    uint64 request_id = 1;
+    SSN2GEnterRoomRsp rsp = 2;
+}
+
+message SSN2RLeaveRoomReq
+{
+    uint64 request_id = 1;
+    SSG2NLeaveRoomReq req = 2;
+}
+
+message SSR2NLeaveRoomRsp
+{
+    uint64 request_id = 1;
+    SSN2GLeaveRoomRsp rsp = 2;
+}
+
+
+message SSN2RChooseLevelReq
+{
+    uint64 request_id = 1;
+    SSG2NChooseLevelReq req = 2;
+}
+
+message SSR2NChooseLevelRsp
+{
+    uint64 request_id = 1;
+    SSN2GChooseLevelRsp rsp = 2;
+}
+
+message SSN2RReadyInRoomReq
+{    
+    uint64 request_id = 1;
+    SSG2NReadyInRoomReq req = 2;
+}
+
+message SSR2NReadyInRoomRsp
+{    
+    uint64 request_id = 1;
+    SSN2GReadyInRoomRsp rsp = 2;
+} 

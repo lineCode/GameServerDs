@@ -1,0 +1,102 @@
+syntax = "proto3";
+import "BaseType.proto";
+package pb;
+
+
+
+enum CSCliBattleCMD
+{
+    CSC2BDefault = 0;
+
+    CMDCliLinkBattleCsReq = 20001;
+    CMDCliLinkBattleScRsp = 20002;
+
+    CMDCliUnLinkBattleCsReq = 20003;
+    CMDCliUnLinkBattleScRsp = 20004;
+
+    CMDCliInstruSync = 20005;
+
+    CMDCliStatusSyncNotify = 20006;
+
+    CMDBattleStatusSyncNotify = 20007;
+    CMDEntityStatusNotify = 20008;
+
+    CMDTryLinkBattleCsReq = 20009;
+    CMDTryLinkBattleScRsp = 20010;
+}
+
+message CliTryLinkBattleCsReq
+{
+  uint32 gameid = 1;
+  uint32 account = 2;
+  string token = 3;
+}
+
+message CliTryLinkBattleScRsp
+{
+  enum RetCode
+  {
+      RET_SUCC = 0;
+      RET_FAILED = 1;
+  }
+  RetCode retcode = 1;
+  uint32 gameid = 2;
+}
+
+message CliStatusChangeNotify
+{
+    enum TypeCode
+    {
+        PLAYER_JOIN = 0;
+        PLAYER_LEAVE = 1;
+        PLAYER_DISCONNECT = 2;
+        PLAYER_RECONNECT = 3;
+    };
+    TypeCode code = 1;
+    uint32 playerid = 2;
+}
+
+
+// 客户端输入
+message ClientInputPush
+{
+  Vector3Struct dir = 1;
+  repeated uint32 bp = 2;
+  float realTime = 3;
+  uint32 playerID = 4 ;
+  uint32 SlaveStep = 5;
+}
+
+
+message PlayerStatusStruct
+{
+  uint32 entityID = 1;
+  Vector3Struct _position = 2;
+  QuaternionStruct _rotation = 3;
+  Vector3Struct _velocity = 4;
+  float health = 5;
+  int32 skillEffect = 6;
+}
+
+message SkillStatusStruct
+{
+  uint32 entityID = 1;
+  Vector3Struct _position = 2;
+  QuaternionStruct _rotation = 3;
+  Vector3Struct _scale = 4;
+  uint32 ownerID = 5;
+  string name = 6;
+}
+
+// 世界状态
+message WorldSnapshotPush
+{
+  uint32 ServerStep = 1;
+  repeated uint32 ProcessedSlaveStep = 2;
+  repeated PlayerStatusStruct PlayerStatusList = 3;
+  repeated SkillStatusStruct SkillStatusList = 4;
+}
+
+
+
+

@@ -1,0 +1,185 @@
+syntax = "proto3";
+import "CsCmd.proto";
+package pb;
+
+
+enum SS_GATE_MSG_CMD {
+
+    SS_GATE_MSG_DEFAULT = 0;
+
+    SS_GATE_MSG_LOGIN_REQ = 400;
+    
+    SS_GATE_MSG_LOGIN_RSP = 401;
+
+    SS_GATE_FORCE_USER_DISCONNECT_REQ = 402; 
+
+    SS_GATE_FORCE_USER_DISCONNECT_RSP = 403;
+
+
+    SS_GATE_GAME_CREATE_ROOM_REQ = 404;
+    SS_GAME_GATE_CREATE_ROOM_RSP = 405;
+
+    SS_GATE_GAME_ENTER_ROOM_REQ = 406;
+    SS_GAME_GATE_ENTER_ROOM_RSP = 407;
+
+    SS_GATE_GAME_LEAVE_ROOM_REQ = 408;
+    SS_GAME_GATE_LEAVE_ROOM_RSQ = 409;
+
+    SS_GATE_GAME_USER_READY_REQ = 410;
+    SS_GAME_GATE_USER_READY_RSP = 411;
+
+    SS_GATE_GAME_CHOOSE_LEVEL_REQ = 412;
+    SS_GAME_GATE_CHOOSE_LEVEL_RSP = 413;
+
+    SS_GATE_USER_INFO_NOTIFY = 450; 
+
+    SS_GAME2GATE_ROOM_INFO_NOTIFY = 451;
+    SS_GAME2GATE_BATTLE_INFO_NOTIFY = 452;
+
+    SS_GATE_GAME_USER_DISCONECT_NOTIFY = 453;
+
+}
+
+
+message SSGateLoginReq
+{
+    uint32 requsted_id = 1;
+    LoginCsReq req = 2;
+}
+ 
+
+message SSGateLoginRsp
+{
+    uint32 request_id = 1;
+    LoginScRsp rsp = 2;
+}
+
+
+message AccountInfo
+{
+    string username = 1;
+    uint32 acountid = 2;
+}
+
+message SSAccountInfoNotify
+{
+    repeated AccountInfo infos = 1;
+}
+
+//用户在线信息缓冲
+message UserOnlineInfoCache
+{
+    uint32 account_id = 1;
+    string game_addr = 2;
+    uint32 game_port = 3;
+    string gate_addr = 4;
+    string gate_port = 5;
+}
+
+
+message SSForceUserDisConnectReq
+{
+    enum RetCode
+    {
+        RET_USER_LOGIN = 0;//用户在其它位置登录
+        RET_SERVER_ERROR = 1;//服务端出错
+    };
+    RetCode retcode = 1;
+    uint32 accountid = 2;
+    uint32 request_gc_id = 3;//gate->cli记录的请求id
+    uint32 request_gg_id = 4;//gate->gameserver请求的id
+}
+
+
+message SSForceUserDisConnectRsp
+{
+    enum RetCode
+    {
+        RET_SUCC = 0;
+        RET_NOT_FOUND = 1;//y
+    };
+    RetCode retcode = 1;
+    uint32 accountid = 2;
+    uint32 request_gc_id = 3;//gate->cli记录的请求id
+    uint32 request_gg_id = 4;//gate->gameserver请求的id
+}
+
+message SSBattleMsgNotify
+{
+    uint32 request_id = 1;
+    BattleMsgScNotify notify = 2;
+}
+
+
+message SSGame2GRoomMsgNotify
+{
+    uint32 request_id = 1;
+    SCGate2ClientMsgNotify notify = 2;
+}
+
+message SSGate2GCreateRoomReq
+{
+    uint32 request_id = 1;
+    TryCreateRoomCsReq req = 2;
+}
+
+message SSGame2GCreateRoomRsp
+{
+    uint32 request_id = 1;
+    TryCreateRoomScRsp rsp = 2;
+}
+
+message SSGate2GEnterRoomReq
+{
+    uint32 request_id = 1;
+    TryEnterRoomCsReq req = 2;
+}
+
+
+message SSGame2GEnterRoomRsp
+{
+    uint32 request_id = 1;
+    TryEnterRoomScRsp rsp = 2;
+}
+
+message SSGate2GLeaveRoomReq 
+{
+    uint32 request_id = 1;
+    TryLeaveRoomCsReq req = 2;
+}
+
+message SSGame2GLeaveRoomRsp
+{
+    uint32 request_id = 1;
+    TryLeaveRoomScRsp rsp = 2;
+}
+
+message SSGate2GReadyRoomReq
+{
+    uint32 request_id = 1;
+    ReadyInRoomCsReq req = 2;
+}
+
+message SSGame2GReadyRoomRsp
+{
+    uint32 request_id = 1;
+    ReadyInRoomScRsp rsp = 2;
+}
+
+message SSGate2GChooseLevelReq
+{
+    uint32 request_id = 1;
+    ChooseLevelCsReq req = 2;
+}
+
+message SSGame2GChooseLevelRsp
+{
+    uint32 request_id = 1;
+    ChooseLevelScRsp  rsp = 2;
+}
+
+
+message SSGate2GUserDisConnectNotify
+{
+    uint32 accountid = 1;
+}

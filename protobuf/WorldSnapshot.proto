@@ -1,0 +1,8 @@
+/*
+    定义世界状态格式
+*/
+syntax = "proto3";
+package pb;
+
+import "BaseType.proto";
+

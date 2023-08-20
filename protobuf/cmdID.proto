@@ -1,0 +1,61 @@
+/*
+    定义基本类型
+*/
+syntax = "proto3";
+package pb;
+
+enum CmdID
+{
+  ClientInputMsg = 0; // 客户端输入的包
+  WorldSnapshotMsg = 1; // 世界状态的包
+  ReadyInRoomCsReqMsg = 2;
+  TryLinkTeamScReqMsg = 3;
+  TeamHeartBeatReqMsg = 4;
+
+
+  //定义房间服务相关的包
+  CmdLoginCsAuthReq = 98;
+  CmdLoginScAuthRsp = 99;
+  
+  CmdLoginCsReq = 100;
+  CmdLoginScRsp = 101;
+
+  CmdCreateRoomCsReq = 102;
+  CmdCreateRoomScRsp = 103;
+
+  CmdEnterRoomCsReq = 104;
+  CmdEnterRoomScRsp = 105;
+
+  CmdLeaveRoomCsReq = 106;
+  CmdLeaveRoomScRsp = 107;
+
+  CmdChooseLevelCsReq = 108;
+  CmdChooseLevelScRsp = 109;
+
+  CmdReadyInRoomCsReq = 110;
+  CmdReadyInRoomScRsp = 111;
+
+  CmdTryLinkTeamScRsp = 112;
+
+  CmdTeamHeartBeatCsReq = 113;
+
+  CmdGameStartScReq = 114;
+
+  CmdGameOverCsReq = 115;
+ 
+  CmdNotifyRoomStatusChange = 201;//对应RoomUserInfoNotify消息(全量消息） 触发+定时推送 -->RoomUserInfoNotify
+
+  CmdNotifyRoomListMsg = 202;//房间列表消息（全量消息） 触发+定时推送 -->对应AllRoomInfoNotify
+
+  //NotifyRoomRemove = 302;//对应RoomInfoMsg消息
+  
+  //NotifyRoomChange = 303;//对应RoomInfoMsg消息
+  
+  //NotifyRoomTotal = 304;//对应AllRoomInfoNotify消息
+
+  CmdNotifySCRoomMsg = 203;//通知用户房间的详细信息
+  CmdNotifySCBattleMsg = 204;//通知战斗房间的详细信息
+
+}
+
+
